@@ -5,8 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class incomingBlocks : MonoBehaviour
+
+public class MainGame : MonoBehaviour
 {
+    private bool _paused = false;
+
     public List<GameObject> imagePlaces = new List<GameObject>();
     
     public List<Sprite> sprites = new List<Sprite>();
@@ -15,49 +18,29 @@ public class incomingBlocks : MonoBehaviour
 
     private List<GameObject> currentNextBlocks = new List<GameObject>();
     private static GameObject CurrentBlock;
-
-
-    private void Awake()
-    {
-    }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
-        blocks = ObjectLists.getBlockTypes;
         
-        try
-        {
-            currentNextBlocks.Add(blocks[Random.Range(0,6)]);
-            currentNextBlocks.Add(blocks[Random.Range(0,6)]);
-            currentNextBlocks.Add(blocks[Random.Range(0,6)]);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (!_paused)
         {
-            GetNextBlocks();
+            if (CurrentBlock == null)
+            {
+                Instantiate(incomingBlocks.getCurrentBlock());
+            }
+
         }
     }
-
-    public static GameObject getCurrentBlock()
-    {
-        return CurrentBlock;
-    }
-
     private void GetNextBlocks()
     {
         
         currentNextBlocks.Add(blocks[Random.Range(0,7)]);
         CurrentBlock = currentNextBlocks[0];
+        MainGame.CurrentBlock = currentNextBlocks[0];
         currentNextBlocks.RemoveAt(0);
         for (int i = 0; i < currentNextBlocks.Count; i++)
         {
@@ -96,4 +79,5 @@ public class incomingBlocks : MonoBehaviour
 
         }
     }
+    
 }
